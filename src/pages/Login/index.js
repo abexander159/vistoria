@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { TextInput } from 'react-native-paper';
 
-const Login = () => {
+const Login = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Login</Text>
@@ -12,7 +12,7 @@ const Login = () => {
             <RectButton style={styles.button} onPress={() => {}}>
                 <Text style={{ color: '#EFEFEF', fontSize: 24, textAlign: 'center' }}>Entrar</Text>
             </RectButton>
-            <Text style={{ fontSize: 16, color: '#7209B7', marginLeft: 90, marginBottom: 20 }}>Não é registrado? Crie uma conta</Text>
+            <Text onPress={() => {navigation.navigate('Register')}} style={{ fontSize: 16, color: '#7209B7', marginLeft: 90, marginBottom: 20, fontWeight: 'bold' }}>Não é registrado? Crie uma conta</ Text>
         </View>
     );
 }
