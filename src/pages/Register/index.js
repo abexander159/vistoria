@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { TextInput } from 'react-native-paper';
 import { ArrowLeft } from 'react-native-feather';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = ({ navigation }) => {
 
@@ -14,7 +15,25 @@ const Register = ({ navigation }) => {
     async function handleSubmit() {
         try {
             
-            
+            const body = { name, email, password, password2 };
+
+            console.log(body);
+
+            const response = await fetch("http://10.0.2.2:3333/register", {
+                method: 'POST',
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(body)
+            });
+
+            const parseResponse = await response.json();
+
+            if (parseResponse.token) {
+                AsyncStorage.removeItem('token');
+                console.log("Conta criada com sucesso!");
+                navigation.goBack();
+            } else {
+                console.log(parseResponse);
+            }
 
         } catch (err) {
             console.error(err.message);
@@ -33,7 +52,7 @@ const Register = ({ navigation }) => {
                     autoCompleteType="name" 
                     keyboardType="default"
                     value={name}
-                    onChangeText={setName}
+                    onChangeText={(value) => setName(value)}
                 />
                 <TextInput 
                     style={styles.input} 
@@ -41,13 +60,13 @@ const Register = ({ navigation }) => {
                     autoCompleteType="email" 
                     keyboardType="email-address"
                     value={email}
-                    onChangeText={setEmail}
+                    onChangeText={(value) => setEmail(value)}
                 />
                 <TextInput 
                     style={styles.input} 
                     label="Senha" mode="outlined" 
                     value={password}
-                    onChangeText={setPassword}
+                    onChangeText={(value) => setPassword(value)}
                     secureTextEntry
                 />
                 <TextInput 
@@ -55,7 +74,7 @@ const Register = ({ navigation }) => {
                     label="Confirmar senha" 
                     mode="outlined" 
                     value={password2}
-                    onChangeText={setPassword2}
+                    onChangeText={(value) => setPassword2(value)}
                     secureTextEntry
                 />
                 <RectButton style={styles.button} onPress={handleSubmit}>
